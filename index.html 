@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Movie Watchlist</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!--
+    CSIT 337 Midterm Project - Movie Watchlist & Rating App
+    GROUP MEMBERS: Jairo Velasquez, Chris Paskas, Joseph Moreno
+    WHO DID WHAT (replace each [Who?] with the member who actually did it):
+      [Who?] - HTML structure and CSS styling (index.html, style.css)
+      [Who?] - Data and localStorage (script.js: movie list, save/load)
+      [Who?] - Display and behavior (script.js: cards, stars, filter, form)
+  -->
+
+  <header>
+    <h1>My Movie Watchlist</h1>
+  </header>
+
+  <main>
+
+    <!-- Controls: add a movie, and filter by status -->
+    <section class="controls">
+
+      <form id="add-form">
+        <input type="text" id="title-input" placeholder="Movie title" required>
+        <select id="genre-input">
+          <option>Action</option>
+          <option>Animation</option>
+          <option>Comedy</option>
+          <option>Crime</option>
+          <option>Drama</option>
+          <option>Sci-Fi</option>
+        </select>
+        <button type="submit">Add Movie</button>
+      </form>
+
+      <div class="filter">
+        <label for="status-filter">Show:</label>
+        <select id="status-filter">
+          <option value="all">All</option>
+          <option value="to-watch">To Watch</option>
+          <option value="watched">Watched</option>
+        </select>
+      </div>
+
+    </section>
+
+    <!-- script.js builds one card for each movie and puts them in here -->
+    <section id="movie-grid"></section>
+
+  </main>
+
+  <!-- Script goes at the bottom so the elements above exist before it runs -->
+  <script src="script.js"></script>
+
+</body>
+</html>
