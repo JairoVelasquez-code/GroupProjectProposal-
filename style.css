@@ -1,0 +1,310 @@
+/*
+  Movie Watchlist - styles
+  GROUP MEMBERS: Jairo Velasquez, Chris Paskas, Joseph Moreno
+  Written by: [Who?]
+*/
+
+:root {
+  --bg: #0b0d1a;
+  --surface: #151933;
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #f2f3fa;
+  --muted: #9aa1c4;
+  --gold: #ffc857;
+  --red: #e63946;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(230, 57, 70, 0.18), transparent 40%),
+    radial-gradient(circle at 85% 10%, rgba(255, 200, 87, 0.12), transparent 35%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+/* Splash header */
+
+header {
+  text-align: center;
+  padding: 72px 20px 48px;
+}
+
+header h1 {
+  display: inline-block;
+  margin: 0;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, var(--gold), var(--red));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.motto {
+  margin: 12px 0 28px;
+  color: var(--muted);
+  font-size: 1.15rem;
+}
+
+header nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+header nav a {
+  padding: 10px 20px;
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+header nav a:hover {
+  color: #1a1a1a;
+  background: var(--gold);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+#add-form,
+#movie-grid {
+  scroll-margin-top: 20px;
+}
+
+/* Add form and filter */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  margin-bottom: 32px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+#add-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.controls input,
+.controls select {
+  padding: 10px 12px;
+  font-size: 1rem;
+  color: var(--text);
+  background: #0f1226;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.controls input::placeholder {
+  color: var(--muted);
+}
+
+.controls input:focus,
+.controls select:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(255, 200, 87, 0.25);
+}
+
+.controls button {
+  padding: 10px 18px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  background: linear-gradient(135deg, var(--gold), #ff9f43);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.controls button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 200, 87, 0.35);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Movie cards */
+
+#movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  padding: 14px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 200, 87, 0.5);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5), 0 0 24px rgba(255, 200, 87, 0.15);
+}
+
+.card h2 {
+  margin: 14px 0 6px;
+  font-size: 1.05rem;
+}
+
+.card p {
+  display: inline-block;
+  margin: 0 0 14px;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(255, 200, 87, 0.12);
+  border-radius: 999px;
+}
+
+.card button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-weight: 700;
+  color: var(--gold);
+  background: transparent;
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.card button:hover {
+  color: #1a1a1a;
+  background: var(--gold);
+}
+
+/* Poster box (shown when a movie has no image) */
+
+.poster {
+  aspect-ratio: 2 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  overflow: hidden;
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(160deg, #3a1c71, #d76d77);
+  border-radius: 10px;
+}
+
+.poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card:nth-child(5n + 2) .poster { background: linear-gradient(160deg, #0f2027, #2c5364); }
+.card:nth-child(5n + 3) .poster { background: linear-gradient(160deg, #232526, #414345); }
+.card:nth-child(5n + 4) .poster { background: linear-gradient(160deg, #134e5e, #3b8d6e); }
+.card:nth-child(5n + 5) .poster { background: linear-gradient(160deg, #8e0e00, #3a0d0d); }
+
+/* Star rating */
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.stars span {
+  font-size: 28px;
+  color: #3b4064;
+  cursor: pointer;
+  transition: transform 0.15s, color 0.15s;
+}
+
+.stars span:hover {
+  color: var(--gold);
+  transform: scale(1.25);
+}
+
+.stars span.filled {
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(255, 200, 87, 0.6);
+}
+
+.empty-message {
+  grid-column: 1 / -1;
+  padding: 40px 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 48px 16px 32px;
+  }
+
+  .controls,
+  #add-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cue the credits</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!--
+    CSIT 337 Midterm Project - Movie Watchlist & Rating App
+    GROUP MEMBERS: Jairo Velasquez, Chris Paskas, Joseph Moreno
+    WHO DID WHAT (replace each [Who?] with the member who actually did it):
+      [Who?] - HTML structure and CSS styling (index.html, style.css)
+      [Who?] - Data and localStorage (script.js: movie list, save/load)
+      [Who?] - Display and behavior (script.js: cards, stars, filter, form)
+  -->
+
+  <header>
+    <h1>Cue The Credits</h1>
+    <p class="motto">Track it. Watch it. Rate it.</p>
+    <nav>
+      <a href="#movie-grid">My Movies</a>
+      <a href="#add-form">Add a Movie</a>
+      <a href="mailto:?subject=My%20movie%20watchlist&body=Come%20build%20your%20own%20movie%20watchlist%20with%20me!">Share with friends</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Controls: add a movie, and filter by status -->
+    <section class="controls">
+
+      <form id="add-form">
+        <input type="text" id="title-input" placeholder="Movie title" required>
+        <select id="genre-input">
+          <option>Action</option>
+          <option>Adventure</option>
+          <option>Animation</option>
+          <option>Comedy</option>
+          <option>Crime</option>
+          <option>Drama</option>
+          <option>Horror</option>
+          <option>Sci-Fi</option>
+        </select>
+        <button type="submit">Add Movie</button>
+      </form>
+
+      <div class="filter">
+        <label for="status-filter">Show:</label>
+        <select id="status-filter">
+          <option value="all">All</option>
+          <option value="to-watch">To Watch</option>
+          <option value="watched">Watched</option>
+        </select>
+      </div>
+
+    </section>
+
+    <!-- script.js builds one card for each movie and puts them in here -->
+    <section id="movie-grid"></section>
+
+  </main>
+
+  <!-- Script goes at the bottom so the elements above exist before it runs -->
+  <script src="script.js"></script>
+
+</body>
+</html>
