@@ -27,15 +27,15 @@
 // NOTE: if you ever change defaultMovies, change this key too (V2 -> V3).
 // Browsers keep whatever was saved under the old key, so a new key makes
 // everyone start fresh from the new starting movies.
-const STORAGE_KEY = "movieWatchlistV2";
+const STORAGE_KEY = "movieWatchlistV3";
 
 // Starting movies, used the first time the page loads.
 // watched: true/false   rating: 0 means "not rated yet", otherwise 1 to 5
 // poster: "" shows a colored box with the title. To use a real image, put
 // the file in an images/ folder and set it, e.g. "images/casino.jpg"
 const defaultMovies = [
-  { id: 1, title: "Chainsaw Man",         genre: "Action", poster: "", watched: false, rating: 0 },
-  { id: 2, title: "Transformers",         genre: "Action", poster: "", watched: false, rating: 0 },
+  { id: 1, title: "Chainsaw Man - The Movie: Reze Arc",   genre: "Action", poster: "", watched: false, rating: 0 },
+  { id: 2, title: "The Fast and Furious: Toyko Drift",         genre: "Action", poster: "", watched: false, rating: 0 },
   { id: 3, title: "The Batman",           genre: "Crime",  poster: "", watched: false, rating: 0 },
   { id: 4, title: "Detective Pikachu",    genre: "Sci-Fi", poster: "", watched: false, rating: 0 },
   { id: 5, title: "Resident Evil (2026)", genre: "Horror", poster: "", watched: false, rating: 0 }
