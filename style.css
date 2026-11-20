@@ -1,21 +1,20 @@
-/*
-  Movie Watchlist - styles
-  GROUP MEMBERS: Jairo Velasquez, Chris Paskas, Joseph Moreno
-  Written by: [Who?]
-*/
-
 :root {
-  --bg: #0b0d1a;
-  --surface: #151933;
-  --border: rgba(255, 255, 255, 0.08);
-  --text: #f2f3fa;
-  --muted: #9aa1c4;
-  --gold: #ffc857;
-  --red: #e63946;
+  color-scheme: dark;
+  --bg: #100e12;
+  --surface: #1b171e;
+  --border: #3a303c;
+  --text: #fff5ea;
+  --muted: #c5b7c3;
+  --gold: #ffc87b;
+  --gutter: clamp(16px, 3.5vw, 48px);
 }
 
 * {
   box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 html {
@@ -27,34 +26,33 @@ body {
   min-height: 100vh;
   font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
   color: var(--text);
-  background:
-    radial-gradient(circle at 15% 0%, rgba(230, 57, 70, 0.18), transparent 40%),
-    radial-gradient(circle at 85% 10%, rgba(255, 200, 87, 0.12), transparent 35%),
-    var(--bg);
-  background-attachment: fixed;
+  background: radial-gradient(ellipse at 12% 0%, #432333 0%, transparent 520px), var(--bg);
 }
 
 /* Splash header */
 
 header {
-  text-align: center;
-  padding: 72px 20px 48px;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding: 44px var(--gutter) 32px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px 24px;
 }
 
 header h1 {
-  display: inline-block;
   margin: 0;
-  font-size: clamp(2.2rem, 6vw, 4rem);
-  letter-spacing: 1px;
-  background: linear-gradient(90deg, var(--gold), var(--red));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  font-family: Georgia, serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.045em;
 }
 
 .motto {
-  margin: 12px 0 28px;
+  grid-column: 1;
+  margin: 0;
   color: var(--muted);
   font-size: 1.15rem;
 }
@@ -63,7 +61,14 @@ header nav {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+header nav:only-child {
+  grid-column: 1;
+  justify-content: flex-start;
 }
 
 header nav a {
@@ -85,9 +90,9 @@ header nav a:hover {
 }
 
 main {
-  max-width: 1100px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 20px 60px;
+  padding: 0 var(--gutter) 60px;
 }
 
 #add-form,
@@ -105,7 +110,7 @@ main {
   gap: 16px;
   padding: 18px 20px;
   margin-bottom: 32px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 16px;
 }
@@ -128,7 +133,7 @@ main {
   padding: 10px 12px;
   font-size: 1rem;
   color: var(--text);
-  background: #0f1226;
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 8px;
 }
@@ -149,7 +154,7 @@ main {
   font-size: 1rem;
   font-weight: 700;
   color: #1a1a1a;
-  background: linear-gradient(135deg, var(--gold), #ff9f43);
+  background: var(--gold);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -171,8 +176,8 @@ button:focus-visible {
 
 #movie-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(12px, 1.7vw, 24px);
 }
 
 .card {
@@ -194,6 +199,182 @@ button:focus-visible {
 .card h2 {
   margin: 14px 0 6px;
   font-size: 1.05rem;
+}
+
+#movie-grid .card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  padding: 0 14px 14px;
+  overflow: hidden;
+  text-align: left;
+}
+
+#movie-grid .poster {
+  width: calc(100% + 28px);
+  margin-inline: -14px;
+  aspect-ratio: 16 / 10;
+  border-radius: 0;
+  text-align: center;
+}
+
+#movie-grid .card button,
+#movie-grid .stars {
+  margin-top: auto;
+}
+
+.card h2 a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+
+.card h2 a:hover {
+  color: var(--gold);
+}
+
+#movie-detail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+  text-align: left;
+}
+
+#movie-detail:hover {
+  transform: none;
+}
+
+#detail-hero {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 360px;
+  background: linear-gradient(120deg, #432333, #1c1927);
+}
+
+#detail-hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#detail-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--surface), transparent 28%);
+}
+
+.detail-copy {
+  position: relative;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  padding: clamp(20px, 5vw, 48px);
+}
+
+#detail-hero:not([hidden]) + .detail-copy {
+  grid-column: 1;
+}
+
+#detail-title {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 5.5vw, 4rem);
+  font-family: Georgia, serif;
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+#movie-detail #detail-synopsis {
+  max-width: 65ch;
+  padding: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+#detail-credits dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  margin: 22px 0;
+}
+
+#detail-credits dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+#detail-credits dd {
+  margin: 0;
+}
+
+#detail-extras {
+  margin-top: 18px;
+}
+
+#detail-extras:not([hidden]) {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+}
+
+#detail-controls button {
+  width: auto;
+  padding-inline: 16px;
+}
+
+#detail-controls .stars {
+  justify-content: flex-start;
+}
+
+.preview-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(20px, 4vw, 32px);
+  margin-bottom: 16px;
+}
+
+.preview-panel h2 {
+  margin: 0 0 14px;
+}
+
+.preview-panel a {
+  color: var(--gold);
+  display: inline-block;
+}
+
+#play-trailer {
+  background: var(--gold);
+  color: var(--bg);
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin: 0 12px 10px 0;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#trailer-player iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  margin-bottom: 8px;
+}
+
+#detail-poster {
+  width: min(100%, 220px);
+  border-radius: 8px;
 }
 
 .card p {
@@ -250,6 +431,10 @@ button:focus-visible {
   object-fit: cover;
 }
 
+#movie-grid .poster:has(img) {
+  padding: 0;
+}
+
 .card:nth-child(5n + 2) .poster { background: linear-gradient(160deg, #0f2027, #2c5364); }
 .card:nth-child(5n + 3) .poster { background: linear-gradient(160deg, #232526, #414345); }
 .card:nth-child(5n + 4) .poster { background: linear-gradient(160deg, #134e5e, #3b8d6e); }
@@ -287,9 +472,44 @@ button:focus-visible {
   color: var(--muted);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1050px) {
+  #movie-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
   header {
-    padding: 48px 16px 32px;
+    grid-template-columns: 1fr;
+    padding-block: 30px 24px;
+  }
+
+  header nav {
+    grid-column: 1;
+    grid-row: auto;
+    justify-content: flex-start;
+    margin-top: 12px;
+  }
+
+  #movie-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #movie-detail {
+    display: block;
+  }
+
+  #detail-hero {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+
+  #detail-hero::after {
+    background: linear-gradient(transparent 45%, var(--surface));
+  }
+
+  #detail-extras:not([hidden]) {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .controls,
@@ -299,7 +519,13 @@ button:focus-visible {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (max-width: 380px) {
+  #movie-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) { 
   html {
     scroll-behavior: auto;
   }
