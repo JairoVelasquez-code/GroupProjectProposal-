@@ -1,57 +1,68 @@
-/*
-  Movie Watchlist & Rating App - script.js
+// JavaScript by Jairo Velasquez.
+// Keep this storage key so saved movies and ratings carry over.
 
-  KEY FEATURES (explained in the comments below):
-    - Movies are stored in an array of objects and saved in localStorage
-    - Each movie shows as a card in a grid
-    - "Mark as watched" turns a card into a rating card with 5 clickable stars
-    - A dropdown filters the cards by status (All / To Watch / Watched)
-    - A form adds new movies
+const STORAGE_KEY = "movieWatchlistV2";
 
-  GROUP MEMBERS: Jairo Velasquez, Chris Paskas, Joseph Moreno
-
-  WHO DID WHAT: [Who?] - sections 1 and 2 (data + localStorage)
-                [Who?] - sections 3 to 6 (cards, actions, filter, form)
-
-  IMAGE SOURCES: none yet. When you add poster images, put them in an images/
-  folder, set the "poster" field below, and credit each one here, like:
-    images/inception.jpg - source: [website name and link]
-*/
-
-
-// ============================================================
-// 1. DATA
-// ============================================================
-
-// The key name localStorage will use to store our list
-// NOTE: if you ever change defaultMovies, change this key too (V2 -> V3).
-// Browsers keep whatever was saved under the old key, so a new key makes
-// everyone start fresh from the new starting movies.
-const STORAGE_KEY = "movieWatchlistV3";
-
-// Starting movies, used the first time the page loads.
-// watched: true/false   rating: 0 means "not rated yet", otherwise 1 to 5
-// poster: "" shows a colored box with the title. To use a real image, put
-// the file in an images/ folder and set it, e.g. "images/casino.jpg"
 const defaultMovies = [
-  { id: 1, title: "Chainsaw Man - The Movie: Reze Arc",   genre: "Action", poster: "", watched: false, rating: 0 },
-  { id: 2, title: "The Fast and Furious: Toyko Drift",         genre: "Action", poster: "", watched: false, rating: 0 },
+  { id: 1, title: "Chainsaw Man - The Movie: Reze Arc",         genre: "Action", poster: "", watched: false, rating: 0 },
+  { id: 2, title: "The Fast and the Furious: Tokyo Drift",         genre: "Action", poster: "", watched: false, rating: 0 },
   { id: 3, title: "The Batman",           genre: "Crime",  poster: "", watched: false, rating: 0 },
-  { id: 4, title: "Detective Pikachu",    genre: "Sci-Fi", poster: "", watched: false, rating: 0 },
+  { id: 4, title: "Pokemon Detective Pikachu",    genre: "Sci-Fi", poster: "", watched: false, rating: 0 },
   { id: 5, title: "Resident Evil (2026)", genre: "Horror", poster: "", watched: false, rating: 0 }
 ];
 
-// The list the whole app works with, plus the current filter choice
+// Preview information for the five starter movies, keyed by movie ID.
+const moviePreviews = {
+  1: {
+    year: 2025,
+    runtime: "1h 40m",
+    director: "Tatsuya Yoshihara",
+    cast: "Kikunosuke Toya, Reina Ueda, Shiori Izawa",
+    synopsis: "Devil hunter Denji meets Reze, a mysterious girl who offers him a glimpse of an ordinary life. Their connection pulls him deeper into a war between devils and hunters.",
+    trailerId: "tAzAhDNdehs",
+    reviews: "https://www.rottentomatoes.com/m/chainsaw_man_the_movie_reze_arc"
+  },
+  2: {
+    year: 2006,
+    runtime: "1h 50m",
+    director: "Justin Lin",
+    cast: "Lucas Black, Sung Kang, Bow Wow",
+    synopsis: "After moving to Tokyo, American teenager Sean Boswell finds his way into the underground drift-racing scene. Learning to handle the city's tight turns puts him on a collision course with its reigning racer.",
+    trailerId: "GEa2GtCNolU",
+    reviews: "https://www.rottentomatoes.com/m/fast_and_the_furious_tokyo_drift"
+  },
+  3: {
+    year: 2022,
+    runtime: "2h 56m",
+    director: "Matt Reeves",
+    cast: "Robert Pattinson, Zoë Kravitz, Jeffrey Wright",
+    synopsis: "A killer leaves a trail of riddles across Gotham. As Batman follows the clues, he uncovers a network of corruption that reaches into his own family's past.",
+    trailerId: "mqqft2x_Aa4",
+    reviews: "https://www.rottentomatoes.com/m/the_batman"
+  },
+  4: {
+    year: 2019,
+    runtime: "1h 44m",
+    director: "Rob Letterman",
+    cast: "Ryan Reynolds, Justice Smith, Kathryn Newton",
+    synopsis: "Searching for his missing father in Ryme City, Tim Goodman teams up with a wisecracking Pikachu he can somehow understand. Their investigation uncovers a threat to humans and Pokémon alike.",
+    trailerId: "1roy4o4tqQM",
+    reviews: "https://www.rottentomatoes.com/m/pokemon_detective_pikachu"
+  },
+  5: {
+    year: 2026,
+    runtime: "1h 34m",
+    director: "Zach Cregger",
+    cast: "Austin Abrams, Zach Cherry, Kali Reis",
+    synopsis: "A medical delivery sends courier Bryan into a night of escalating horror. As the city descends into chaos, finishing the job gives way to staying alive.",
+    trailerId: "mNd1gb19A-c",
+    reviews: "https://www.rottentomatoes.com/m/resident_evil_2026"
+  }
+};
+
 let movies = loadMovies();
 let currentFilter = "all";
 
-
-// ============================================================
-// 2. LOCALSTORAGE
-// ============================================================
-
-// localStorage only stores text, so we convert the array to text going in
-// (JSON.stringify) and back to an array coming out (JSON.parse).
 function saveMovies() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(movies));
 }
@@ -59,24 +70,18 @@ function saveMovies() {
 function loadMovies() {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) {
-    return JSON.parse(saved);   // we've saved before, use that list
+    return JSON.parse(saved);
   }
-  return defaultMovies;         // first visit, use the starting movies
+  return defaultMovies;
 }
 
-
-// ============================================================
-// 3. DRAWING THE CARDS
-// ============================================================
-
 const grid = document.getElementById("movie-grid");
+// A URL with an id opens the detail view in this same HTML file.
+const detailId = new URLSearchParams(window.location.search).get("id");
 
-// Clears the grid and rebuilds it from the movies array.
-// We call this after every change so the screen always matches the data.
 function render() {
   grid.innerHTML = "";
 
-  // filter() keeps only the movies that match the dropdown choice
   const visible = movies.filter(function (movie) {
     if (currentFilter === "watched") {
       return movie.watched;
@@ -84,7 +89,7 @@ function render() {
     if (currentFilter === "to-watch") {
       return !movie.watched;
     }
-    return true;   // "all"
+    return true;
   });
 
   if (visible.length === 0) {
@@ -100,19 +105,20 @@ function render() {
   });
 }
 
-// Builds the HTML for ONE movie card and returns it.
-// We use textContent (not innerHTML) so a typed title can't inject HTML.
 function buildCard(movie) {
   const card = document.createElement("div");
   card.className = "card";
 
-  // Poster: a real image if the movie has one, otherwise the title in a box
   const poster = document.createElement("div");
   poster.className = "poster";
-  if (movie.poster) {
+  const preview = getMoviePreview(movie);
+  if (movie.poster || preview) {
     const img = document.createElement("img");
-    img.src = movie.poster;
-    img.alt = "Poster for " + movie.title;
+    img.src = movie.poster || trailerArtwork(preview);
+    img.alt = movie.poster ? "Poster for " + movie.title : "";
+    img.addEventListener("error", function () {
+      poster.textContent = movie.title;
+    });
     poster.appendChild(img);
   } else {
     poster.textContent = movie.title;
@@ -120,30 +126,34 @@ function buildCard(movie) {
   card.appendChild(poster);
 
   const title = document.createElement("h2");
-  title.textContent = movie.title;
+  const link = document.createElement("a");
+  link.href = "index.html?id=" + encodeURIComponent(movie.id);
+  link.textContent = movie.title;
+  title.appendChild(link);
   card.appendChild(title);
 
   const genre = document.createElement("p");
   genre.textContent = movie.genre;
   card.appendChild(genre);
 
-  // Not watched yet: show the button. Watched: show the stars instead.
-  if (movie.watched) {
-    card.appendChild(buildStars(movie));
-  } else {
-    const button = document.createElement("button");
-    button.textContent = "Mark as watched";
-    button.addEventListener("click", function () {
-      markWatched(movie.id);
-    });
-    card.appendChild(button);
-  }
-
+  card.appendChild(buildWatchControls(movie));
   return card;
 }
 
-// Builds a row of 5 stars. Stars up to the movie's rating get the "filled"
-// class (gold in the CSS). Clicking star number i sets the rating to i.
+// Use the same watched button and stars on both pages.
+function buildWatchControls(movie) {
+  if (movie.watched) {
+    return buildStars(movie);
+  }
+
+  const button = document.createElement("button");
+  button.textContent = "Mark as watched";
+  button.addEventListener("click", function () {
+    markWatched(movie.id);
+  });
+  return button;
+}
+
 function buildStars(movie) {
   const row = document.createElement("div");
   row.className = "stars";
@@ -163,12 +173,6 @@ function buildStars(movie) {
   return row;
 }
 
-
-// ============================================================
-// 4. ACTIONS (each one: change the data, save it, redraw)
-// ============================================================
-
-// Finds the movie object with a matching id
 function findMovie(id) {
   return movies.find(function (movie) {
     return movie.id === id;
@@ -176,19 +180,21 @@ function findMovie(id) {
 }
 
 function markWatched(id) {
+  movies = loadMovies();
   findMovie(id).watched = true;
   saveMovies();
-  render();
+  renderPage();
 }
 
 function setRating(id, stars) {
+  movies = loadMovies();
   findMovie(id).rating = stars;
   saveMovies();
-  render();
+  renderPage();
 }
 
 function addMovie(event) {
-  event.preventDefault();   // stops the form from reloading the page
+  event.preventDefault();
 
   const titleInput = document.getElementById("title-input");
   const genreInput = document.getElementById("genre-input");
@@ -198,8 +204,9 @@ function addMovie(event) {
     return;
   }
 
+  movies = loadMovies();
   movies.push({
-    id: Date.now(),   // the current time in milliseconds works as a unique id
+    id: Date.now(),
     title: title,
     genre: genreInput.value,
     poster: "",
@@ -207,28 +214,117 @@ function addMovie(event) {
     rating: 0
   });
 
-  titleInput.value = "";   // empty the box for the next movie
+  titleInput.value = "";
   saveMovies();
   render();
 }
 
+if (detailId === null) {
+  document.getElementById("status-filter").addEventListener("change", function (event) {
+    currentFilter = event.target.value;
+    render();
+  });
 
-// ============================================================
-// 5. FILTER
-// ============================================================
+  document.getElementById("add-form").addEventListener("submit", addMovie);
+}
 
-// When the dropdown changes, remember the choice and redraw
-document.getElementById("status-filter").addEventListener("change", function (event) {
-  currentFilter = event.target.value;
-  render();
+// Match the title too, since an older watchlist may use the same ID for another film.
+function getMoviePreview(movie) {
+  const starter = defaultMovies.find(function (entry) {
+    return entry.id === movie.id && entry.title === movie.title;
+  });
+  return starter ? moviePreviews[starter.id] : undefined;
+}
+
+function trailerArtwork(preview) {
+  return "https://i.ytimg.com/vi/" + preview.trailerId + "/hqdefault.jpg";
+}
+
+function renderPreview(movie, preview) {
+  const hero = document.getElementById("detail-hero");
+  const synopsis = document.getElementById("detail-synopsis");
+  const credits = document.getElementById("detail-credits");
+  const extras = document.getElementById("detail-extras");
+  hero.hidden = !preview;
+  synopsis.hidden = !preview;
+  credits.hidden = !preview;
+  extras.hidden = !preview;
+  if (!preview) {
+    return;
+  }
+
+  const art = document.getElementById("detail-art");
+  art.onerror = function () { art.hidden = true; };
+  if (!art.hasAttribute("src")) {
+    art.src = trailerArtwork(preview);
+  }
+  synopsis.textContent = preview.synopsis;
+  document.getElementById("detail-director").textContent = preview.director;
+  document.getElementById("detail-cast").textContent = preview.cast;
+  document.getElementById("detail-reviews").href = preview.reviews;
+  document.getElementById("detail-trailer").href = "https://www.youtube.com/watch?v=" + preview.trailerId;
+
+  const play = document.getElementById("play-trailer");
+  play.onclick = function () {
+    const player = document.getElementById("trailer-player");
+    const frame = document.createElement("iframe");
+    frame.title = movie.title + " trailer";
+    frame.allow = "autoplay; encrypted-media; picture-in-picture";
+    frame.allowFullscreen = true;
+    frame.src = "https://www.youtube-nocookie.com/embed/" + preview.trailerId + "?autoplay=1";
+    player.replaceChildren(frame);
+    player.hidden = false;
+    play.hidden = true;
+    frame.focus();
+  };
+}
+
+function renderDetail() {
+  const movie = movies.find(function (entry) {
+    return String(entry.id) === detailId;
+  });
+  const title = document.getElementById("detail-title");
+  const genre = document.getElementById("detail-genre");
+  const poster = document.getElementById("detail-poster");
+  const controls = document.getElementById("detail-controls");
+
+  if (!movie) {
+    title.textContent = "Movie not found";
+    genre.textContent = "Open a title from your watchlist to see its details.";
+    poster.hidden = true;
+    controls.replaceChildren();
+    return;
+  }
+
+  document.title = movie.title + " | Cue The Credits";
+  title.textContent = movie.title;
+  const preview = getMoviePreview(movie);
+  genre.textContent = preview ? [preview.year, movie.genre, preview.runtime].join(" · ") : movie.genre;
+  if (movie.poster) {
+    poster.src = movie.poster;
+    poster.alt = "Poster for " + movie.title;
+    poster.hidden = false;
+  }
+  renderPreview(movie, preview);
+  controls.replaceChildren(buildWatchControls(movie));
+}
+
+function renderPage() {
+  if (detailId !== null) {
+    renderDetail();
+  } else {
+    render();
+  }
+}
+
+document.getElementById("watchlist-view").hidden = detailId !== null;
+document.getElementById("watchlist-header").hidden = detailId !== null;
+document.getElementById("detail-view").hidden = detailId === null;
+document.getElementById("detail-header").hidden = detailId === null;
+renderPage();
+
+// Refresh saved values when returning with the browser's Back button.
+window.addEventListener("pageshow", function () {
+  movies = loadMovies();
+  renderPage();
 });
-
-
-// ============================================================
-// 6. FORM + START
-// ============================================================
-
-document.getElementById("add-form").addEventListener("submit", addMovie);
-
-// Draw the cards for the first time
-render();
